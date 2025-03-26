@@ -8,20 +8,40 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt } = req.body;
+    const { prompt, history = [] } = req.body;
     
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
     }
 
+    // Combine history with current prompt
+    const contextPrompt = history
+      .map(msg => {
+        const role = msg.role === 'user' ? 'Human' :
+                    msg.role === 'Grok' ? 'Grok' :
+                    msg.role === 'Gemini' ? 'Gemini' :
+                    'Assistant';
+        return `${role}: ${msg.content}`;
+      })
+      .join('\n\n');
+    
+    const fullPrompt = contextPrompt ? 
+      `${contextPrompt}\n\nHuman: ${prompt}\n\nGemini:` : 
+      prompt;
+
     const response = await genAI.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: prompt,
+        model: 'gemini-2.5-pro-exp-03-25',
+        contents: fullPrompt,
       });
     
     return res.status(200).json({ text: response.text });
   } catch (error) {
     console.error('Gemini API error:', error);
-    return res.status(500).json({ error: 'Failed to generate content' });
+    // Extract the detailed error message if available
+    const errorMessage = error.message || 'Failed to generate content';
+    return res.status(500).json({ 
+      error: errorMessage,
+      details: error.response?.data || error.toString()
+    });
   }
 }

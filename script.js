@@ -17,6 +17,9 @@ const input = document.getElementById('input');
 const modelSelect = document.getElementById('model-select');
 const sendBtn = document.getElementById('send');
 
+// Track conversation history
+let conversationHistory = [];
+
 // Auto-resize textarea as user types
 function autoResizeTextarea() {
     input.style.height = 'auto';
@@ -44,13 +47,18 @@ function addMessage(text, sender) {
     // Create a container for the message content
     const contentSpan = document.createElement('span');
     contentSpan.className = 'message-content';
-    // Use marked.parse instead of window.marked
     contentSpan.innerHTML = marked.parse(text, { breaks: true });
     
     msg.appendChild(senderSpan);
     msg.appendChild(contentSpan);
     chatDiv.appendChild(msg);
     chatDiv.scrollTop = chatDiv.scrollHeight; // Auto-scroll
+
+    // Add message to history with specific model name
+    conversationHistory.push({ 
+        role: sender === 'user' ? 'user' : sender,
+        content: text 
+    });
 }
 
 async function sendGrokMessage() {
@@ -66,7 +74,10 @@ async function sendGrokMessage() {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: savedMessage }), // Use saved message
+            body: JSON.stringify({ 
+                message: savedMessage,
+                history: conversationHistory.slice(0, -1) // Send all but the last message (current user message)
+            }),
         });
 
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -83,20 +94,26 @@ async function sendGeminiMessage() {
     if (!message) return;
 
     addMessage(message, 'user');
-    const savedMessage = message; // Save the formatted message
+    const savedMessage = message;
     input.value = '';
-    input.style.height = '37px'; // Reset height immediately
+    input.style.height = '37px';
 
     try {
         const response = await fetch('/api/gemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: savedMessage }), // Use saved message
+            body: JSON.stringify({ 
+                prompt: savedMessage,
+                history: conversationHistory.slice(0, -1) // Send all but the last message (current user message)
+            }),
         });
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
         const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error + (data.details ? `\n\nDetails: ${data.details}` : ''));
+        }
+
         addMessage(data.text, 'Gemini');
     } catch (error) {
         addMessage(`Error: ${error.message}`, 'Gemini');

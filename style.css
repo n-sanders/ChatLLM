@@ -28,6 +28,7 @@ h1 {
 .message {
     margin: 0.5rem 0;
     line-height: 1.4;
+    white-space: pre-wrap;
 }
 .message .sender-name {
     font-weight: bold;
