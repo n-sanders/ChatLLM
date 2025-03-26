@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { systemPrompt } from "../config.js";
 
 const genAI = new GoogleGenAI(process.env.GOOGLE_API_KEY);
 
@@ -15,15 +16,16 @@ export default async function handler(req, res) {
     }
 
     // Combine history with current prompt
-    const contextPrompt = history
-      .map(msg => {
+    const contextPrompt = [
+      `System: ${systemPrompt}`,
+      ...history.map(msg => {
         const role = msg.role === 'user' ? 'Human' :
                     msg.role === 'Grok' ? 'Grok' :
                     msg.role === 'Gemini' ? 'Gemini' :
                     'Assistant';
         return `${role}: ${msg.content}`;
       })
-      .join('\n\n');
+    ].join('\n\n');
     
     const fullPrompt = contextPrompt ? 
       `${contextPrompt}\n\nHuman: ${prompt}\n\nGemini:` : 

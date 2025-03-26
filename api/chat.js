@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { systemPrompt } from "../config.js";
 
 // Initialize OpenAI client with environment variable for API key
 const client = new OpenAI({
@@ -10,19 +11,19 @@ export default async function handler(req, res) {
     try {
         const { message, history = [] } = req.body;
         if (!message) {
-            return res.status(400).json({ error: 'Message is required' });
+            return res.status(400).json({ error: "Message is required" });
         }
 
         // Format conversation history for the API
         const messages = [
             {
                 role: "system",
-                content: "You are Grok, a chatbot inspired by the Hitchhiker's Guide to the Galaxy.",
+                content: "You are Grok, a chatbot inspired by the Hitchhiker's Guide to the Galaxy." + systemPrompt,
             },
             ...history.map(msg => ({
                 // Map 'Grok' and 'Gemini' roles to 'assistant' for the API
-                role: msg.role === 'user' ? 'user' : 
-                      (msg.role === 'Grok' || msg.role === 'Gemini') ? 'assistant' : 
+                role: msg.role === "user" ? "user" : 
+                      (msg.role === "Grok" || msg.role === "Gemini") ? "assistant" : 
                       msg.role,
                 content: msg.content
             })),
