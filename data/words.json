@@ -1,0 +1,12 @@
+[
+    {"word": "after", "prompt": "After. We can play outside after school. After.", "audio-file": "after.wav"},
+    {"word": "again", "prompt": "Again. Can you read the story again? Again.", "audio-file": "again.wav"},
+    {"word": "an", "prompt": "An. An apple fell from the tree. An.", "audio-file": "an.wav"},
+    {"word": "any", "prompt": "Any. Do you have any crayons left? Any.", "audio-file": "any.wav"},
+    {"word": "as", "prompt": "As. Run as fast as you can. As.", "audio-file": "as.wav"},
+    {"word": "ask", "prompt": "Ask. Ask your teacher for help. Ask.", "audio-file": "ask.wav"},
+    {"word": "by", "prompt": "By. The park is by the river. By.", "audio-file": "by.wav"},
+    {"word": "could", "prompt": "Could. She could jump really high. Could.", "audio-file": "could.wav"},
+    {"word": "every", "prompt": "Every. Every bird sings in the morning. Every.", "audio-file": "every.wav"},
+    {"word": "fly", "prompt": "Fly. Birds fly high in the sky. Fly.", "audio-file": "fly.wav"}
+  ]

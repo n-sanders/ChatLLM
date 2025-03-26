@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatLLM</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>ChatLLM: Talk to AI!</h1>
+    <p>Type a message below to start chatting.</p>
+    <div id="chat"></div>
+    <div class="input-container">
+        <input id="input" type="text" placeholder="Type a message...">
+        <select id="model-select">
+            <option value="grok" selected>Grok</option>
+            <option value="gemini">Gemini</option>
+        </select>
+        <button id="send">Send</button>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

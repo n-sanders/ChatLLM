@@ -1,0 +1,30 @@
+{
+  "name": "seven-sanders-spelling",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "start": "http-server -p 3000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n-sanders/seven-sanders-spelling.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n-sanders/seven-sanders-spelling/issues"
+  },
+  "homepage": "https://github.com/n-sanders/seven-sanders-spelling#readme",
+  "description": "",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "@google/genai": "^0.6.1",
+    "@vercel/blob": "^0.23.4",
+    "marked": "^15.0.7",
+    "openai": "^4.89.0"
+  }
+}

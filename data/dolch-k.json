@@ -1,0 +1,266 @@
+{
+    "title": "Level K",
+    "description": "Dolch K list. 52 Words.",
+    "words": [
+      {
+        "word": "all",
+        "prompt": "All. We ate all the cookies. All.",
+        "audio-file": "all.wav"
+      },
+      {
+        "word": "am",
+        "prompt": "Am. I am very happy today. Am.",
+        "audio-file": "am.wav"
+      },
+      {
+        "word": "are",
+        "prompt": "Are. They are playing outside. Are.",
+        "audio-file": "are.wav"
+      },
+      {
+        "word": "at",
+        "prompt": "At. She is at the park. At.",
+        "audio-file": "at.wav"
+      },
+      {
+        "word": "ate",
+        "prompt": "Ate. He ate his lunch quickly. Ate.",
+        "audio-file": "ate.wav"
+      },
+      {
+        "word": "be",
+        "prompt": "Be. I will be home soon. Be.",
+        "audio-file": "be.wav"
+      },
+      {
+        "word": "black",
+        "prompt": "Black. The cat is black. Black.",
+        "audio-file": "black.wav"
+      },
+      {
+        "word": "brown",
+        "prompt": "Brown. The dog has brown fur. Brown.",
+        "audio-file": "brown.wav"
+      },
+      {
+        "word": "but",
+        "prompt": "But. I wanted to go, but it rained. But.",
+        "audio-file": "but.wav"
+      },
+      {
+        "word": "came",
+        "prompt": "Came. She came to my house. Came.",
+        "audio-file": "came.wav"
+      },
+      {
+        "word": "did",
+        "prompt": "Did. He did his homework. Did.",
+        "audio-file": "did.wav"
+      },
+      {
+        "word": "do",
+        "prompt": "Do. I can do this puzzle. Do.",
+        "audio-file": "do.wav"
+      },
+      {
+        "word": "eat",
+        "prompt": "Eat. We eat dinner together. Eat.",
+        "audio-file": "eat.wav"
+      },
+      {
+        "word": "four",
+        "prompt": "Four. I have four toys. Four.",
+        "audio-file": "four.wav"
+      },
+      {
+        "word": "get",
+        "prompt": "Get. Can you get the ball? Get.",
+        "audio-file": "get.wav"
+      },
+      {
+        "word": "good",
+        "prompt": "Good. This cake is good. Good.",
+        "audio-file": "good.wav"
+      },
+      {
+        "word": "have",
+        "prompt": "Have. I have a new book. Have.",
+        "audio-file": "have.wav"
+      },
+      {
+        "word": "he",
+        "prompt": "He. He runs very fast. He.",
+        "audio-file": "he.wav"
+      },
+      {
+        "word": "into",
+        "prompt": "Into. She jumped into the pool. Into.",
+        "audio-file": "into.wav"
+      },
+      {
+        "word": "like",
+        "prompt": "Like. I like to draw pictures. Like.",
+        "audio-file": "like.wav"
+      },
+      {
+        "word": "must",
+        "prompt": "Must. We must finish this now. Must.",
+        "audio-file": "must.wav"
+      },
+      {
+        "word": "new",
+        "prompt": "New. She got a new dress. New.",
+        "audio-file": "new.wav"
+      },
+      {
+        "word": "no",
+        "prompt": "No. There is no more candy. No.",
+        "audio-file": "no.wav"
+      },
+      {
+        "word": "now",
+        "prompt": "Now. Let’s play now. Now.",
+        "audio-file": "now.wav"
+      },
+      {
+        "word": "on",
+        "prompt": "On. The book is on the table. On.",
+        "audio-file": "on.wav"
+      },
+      {
+        "word": "our",
+        "prompt": "Our. This is our house. Our.",
+        "audio-file": "our.wav"
+      },
+      {
+        "word": "out",
+        "prompt": "Out. He went out to play. Out.",
+        "audio-file": "out.wav"
+      },
+      {
+        "word": "please",
+        "prompt": "Please. Can I have some, please? Please.",
+        "audio-file": "please.wav"
+      },
+      {
+        "word": "pretty",
+        "prompt": "Pretty. The flower is pretty. Pretty.",
+        "audio-file": "pretty.wav"
+      },
+      {
+        "word": "ran",
+        "prompt": "Ran. She ran to the door. Ran.",
+        "audio-file": "ran.wav"
+      },
+      {
+        "word": "ride",
+        "prompt": "Ride. I can ride my bike. Ride.",
+        "audio-file": "ride.wav"
+      },
+      {
+        "word": "saw",
+        "prompt": "Saw. He saw a big bird. Saw.",
+        "audio-file": "saw.wav"
+      },
+      {
+        "word": "say",
+        "prompt": "Say. She will say hello. Say.",
+        "audio-file": "say.wav"
+      },
+      {
+        "word": "she",
+        "prompt": "She. She likes to sing. She.",
+        "audio-file": "she.wav"
+      },
+      {
+        "word": "so",
+        "prompt": "So. It is so hot today. So.",
+        "audio-file": "so.wav"
+      },
+      {
+        "word": "soon",
+        "prompt": "Soon. We will eat soon. Soon.",
+        "audio-file": "soon.wav"
+      },
+      {
+        "word": "that",
+        "prompt": "That. That dog is big. That.",
+        "audio-file": "that.wav"
+      },
+      {
+        "word": "there",
+        "prompt": "There. The ball is over there. There.",
+        "audio-file": "there.wav"
+      },
+      {
+        "word": "they",
+        "prompt": "They. They are my friends. They.",
+        "audio-file": "they.wav"
+      },
+      {
+        "word": "this",
+        "prompt": "This. This is my pencil. This.",
+        "audio-file": "this.wav"
+      },
+      {
+        "word": "too",
+        "prompt": "Too. I want some too. Too.",
+        "audio-file": "too.wav"
+      },
+      {
+        "word": "under",
+        "prompt": "Under. The cat is under the bed. Under.",
+        "audio-file": "under.wav"
+      },
+      {
+        "word": "want",
+        "prompt": "Want. I want a snack. Want.",
+        "audio-file": "want.wav"
+      },
+      {
+        "word": "was",
+        "prompt": "Was. She was very tired. Was.",
+        "audio-file": "was.wav"
+      },
+      {
+        "word": "well",
+        "prompt": "Well. He did his work well. Well.",
+        "audio-file": "well.wav"
+      },
+      {
+        "word": "went",
+        "prompt": "Went. We went to the store. Went.",
+        "audio-file": "went.wav"
+      },
+      {
+        "word": "what",
+        "prompt": "What. What is your name? What.",
+        "audio-file": "what.wav"
+      },
+      {
+        "word": "white",
+        "prompt": "White. The snow is white. White.",
+        "audio-file": "white.wav"
+      },
+      {
+        "word": "who",
+        "prompt": "Who. Who is at the door? Who.",
+        "audio-file": "who.wav"
+      },
+      {
+        "word": "will",
+        "prompt": "Will. I will help you. Will.",
+        "audio-file": "will.wav"
+      },
+      {
+        "word": "with",
+        "prompt": "With. She plays with her dog. With.",
+        "audio-file": "with.wav"
+      },
+      {
+        "word": "yes",
+        "prompt": "Yes. Yes, I like it. Yes.",
+        "audio-file": "yes.wav"
+      }
+    ]
+}
