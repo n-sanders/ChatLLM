@@ -17,6 +17,20 @@ const input = document.getElementById('input');
 const modelSelect = document.getElementById('model-select');
 const sendBtn = document.getElementById('send');
 
+// Auto-resize textarea as user types
+function autoResizeTextarea() {
+    input.style.height = 'auto';
+    input.style.height = (input.scrollHeight) + 'px';
+}
+
+input.addEventListener('input', autoResizeTextarea);
+input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
 function addMessage(text, sender) {
     const msg = document.createElement('div');
     msg.className = `message ${sender}`;
@@ -44,13 +58,15 @@ async function sendGrokMessage() {
     if (!message) return;
 
     addMessage(message, 'user');
+    const savedMessage = message; // Save the formatted message
     input.value = '';
+    input.style.height = '37px'; // Reset height immediately
 
     try {
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message }),
+            body: JSON.stringify({ message: savedMessage }), // Use saved message
         });
 
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -67,13 +83,15 @@ async function sendGeminiMessage() {
     if (!message) return;
 
     addMessage(message, 'user');
+    const savedMessage = message; // Save the formatted message
     input.value = '';
+    input.style.height = '37px'; // Reset height immediately
 
     try {
         const response = await fetch('/api/gemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: message }),
+            body: JSON.stringify({ prompt: savedMessage }), // Use saved message
         });
 
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -95,8 +113,3 @@ async function sendMessage() {
 }
 
 sendBtn.addEventListener('click', sendMessage);
-input.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-        sendMessage();
-    }
-});

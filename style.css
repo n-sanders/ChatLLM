@@ -74,6 +74,7 @@ h1 {
 .input-container {
     display: flex;
     gap: 0.5rem;
+    align-items: flex-start;
 }
 #input {
     flex: 1;
@@ -81,8 +82,15 @@ h1 {
     border: 1px solid #444;
     border-radius: 4px;
     background-color: #363636;
-    color: #e0e0e0;
-    font-size: 1rem;
+    color: #fff;
+    resize: none;
+    height: 37px;
+    min-height: 37px;
+    max-height: 150px;
+    overflow-y: auto;
+    line-height: 1.4;
+    font-family: inherit;
+    font-size: inherit;
 }
 #input:focus {
     outline: none;
@@ -95,6 +103,7 @@ h1 {
     background-color: #363636;
     color: #fff;
     margin-right: 0.5rem;
+    height: 37px; /* Fixed height to match initial input height */
 }
 
 #model-select:focus {
@@ -115,6 +124,7 @@ button {
     cursor: pointer;
     font-size: 1rem;
     transition: background-color 0.2s;
+    height: 37px; /* Fixed height to match initial input height */
 }
 button:hover {
     background-color: #357abd;
