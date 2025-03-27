@@ -9,16 +9,30 @@ let enteredLetters = [];
 let currentPos = 0;
 let currentAttempts = 0;
 let allWords = [];
-let spellingListTitle = ''; // New: Store the title
-let spellingListDescription = ''; // New: Store the description
 
 const chatDiv = document.getElementById('chat');
 const input = document.getElementById('input');
 const modelSelect = document.getElementById('model-select');
 const sendBtn = document.getElementById('send');
+const newChatBtn = document.getElementById('new-chat');
+const conversationNameInput = document.getElementById('conversation-name');
 
 // Track conversation history
 let conversationHistory = [];
+
+// Generate a default conversation name
+function generateDefaultName() {
+    const date = new Date().toLocaleDateString('en-US', { 
+        month: 'short', 
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric'
+    });
+    return `Chat ${date}`;
+}
+
+// Set initial conversation name
+conversationNameInput.value = generateDefaultName();
 
 // Auto-resize textarea as user types
 function autoResizeTextarea() {
@@ -52,7 +66,7 @@ function addMessage(text, sender) {
     msg.appendChild(senderSpan);
     msg.appendChild(contentSpan);
     chatDiv.appendChild(msg);
-    chatDiv.scrollTop = chatDiv.scrollHeight; // Auto-scroll
+    chatDiv.scrollTop = chatDiv.scrollHeight;
 
     // Add message to history with specific model name
     conversationHistory.push({ 
@@ -61,28 +75,47 @@ function addMessage(text, sender) {
     });
 }
 
+async function startNewChat() {
+    // Clear the chat UI
+    chatDiv.innerHTML = '';
+    conversationHistory = [];
+    
+    // Generate new conversation name
+    conversationNameInput.value = generateDefaultName();
+    
+    // Focus the input
+    input.focus();
+}
+
 async function sendGrokMessage() {
     const message = input.value.trim();
     if (!message) return;
 
     addMessage(message, 'user');
-    const savedMessage = message; // Save the formatted message
+    const savedMessage = message;
     input.value = '';
-    input.style.height = '37px'; // Reset height immediately
+    input.style.height = '37px';
 
     try {
+        // Get the current conversation name
+        const currentConversationName = conversationNameInput.value || 'Untitled Chat';
+        
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 message: savedMessage,
-                history: conversationHistory.slice(0, -1) // Send all but the last message (current user message)
+                history: conversationHistory.slice(0, -1),
+                conversationName: currentConversationName
             }),
         });
 
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
         const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error + (data.details ? `\n\nDetails: ${data.details}` : ''));
+        }
+
         addMessage(data.message, 'Grok');
     } catch (error) {
         addMessage(`Error: ${error.message}`, 'Grok');
@@ -99,12 +132,16 @@ async function sendGeminiMessage() {
     input.style.height = '37px';
 
     try {
+        // Get the current conversation name
+        const currentConversationName = conversationNameInput.value || 'Untitled Chat';
+        
         const response = await fetch('/api/gemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
                 prompt: savedMessage,
-                history: conversationHistory.slice(0, -1) // Send all but the last message (current user message)
+                history: conversationHistory.slice(0, -1),
+                conversationName: currentConversationName
             }),
         });
 
@@ -124,9 +161,11 @@ async function sendMessage() {
     const selectedModel = modelSelect.value;
     if (selectedModel === 'grok') {
         await sendGrokMessage();
-    } else if (selectedModel === 'gemini') {
+    } else {
         await sendGeminiMessage();
     }
 }
 
+// Event listeners
 sendBtn.addEventListener('click', sendMessage);
+newChatBtn.addEventListener('click', startNewChat);

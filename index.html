@@ -9,15 +9,19 @@
 <body>
   <div class="container">
     <h1>ChatLLM: Talk to AI!</h1>
+    <div class="conversation-header">
+      <input type="text" id="conversation-name" placeholder="Untitled Conversation">
+      <button id="new-chat" title="Start new conversation">New Chat</button>
+    </div>
     <p>Type a message below to start chatting.</p>
     <div id="chat"></div>
     <div class="input-container">
-        <textarea id="input" placeholder="Type a message..." rows="1"></textarea>
-        <select id="model-select">
-            <option value="grok" selected>Grok</option>
-            <option value="gemini">Gemini</option>
-        </select>
-        <button id="send">Send</button>
+      <textarea id="input" rows="1" placeholder="Type your message..."></textarea>
+      <select id="model-select">
+        <option value="grok" selected>Grok</option>
+        <option value="gemini">Gemini</option>
+      </select>
+      <button id="send">Send</button>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

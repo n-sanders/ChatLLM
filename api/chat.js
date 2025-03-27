@@ -1,18 +1,22 @@
 import OpenAI from "openai";
 import { systemPrompt } from "../config.js";
+import { saveChatHistory } from "../utils/blobStorage.js";
 
 // Initialize OpenAI client with environment variable for API key
 const client = new OpenAI({
-    apiKey: process.env.XAI_API_KEY, // Store your API key in Vercel environment variables
+    apiKey: process.env.XAI_API_KEY, 
     baseURL: "https://api.x.ai/v1",
 });
 
 export default async function handler(req, res) {
     try {
-        const { message, history = [] } = req.body;
+        const { message, history = [], conversationName } = req.body;
         if (!message) {
             return res.status(400).json({ error: "Message is required" });
         }
+
+        // Remove initial save to avoid duplication
+        // Only save once after we get the response
 
         // Format conversation history for the API
         const messages = [
@@ -21,7 +25,6 @@ export default async function handler(req, res) {
                 content: "You are Grok, a chatbot inspired by the Hitchhiker's Guide to the Galaxy." + systemPrompt,
             },
             ...history.map(msg => ({
-                // Map 'Grok' and 'Gemini' roles to 'assistant' for the API
                 role: msg.role === "user" ? "user" : 
                       (msg.role === "Grok" || msg.role === "Gemini") ? "assistant" : 
                       msg.role,
@@ -41,6 +44,16 @@ export default async function handler(req, res) {
 
         // Extract the response
         const responseContent = completion.choices[0].message.content;
+
+        // Save the complete conversation including the new response
+        // This is the only place we should save to avoid duplicate files
+        const updatedHistory = [...history, 
+            { role: 'user', content: message },
+            { role: 'Grok', content: responseContent }
+        ];
+        
+        console.log('Saving chat with conversation name:', conversationName);
+        await saveChatHistory(updatedHistory, conversationName);
 
         // Send the response back as JSON
         res.status(200).json({ message: responseContent });
