@@ -1,6 +1,14 @@
 // Remove the import and use CDN
 // import { marked } from 'marked';
 
+// Load config text into textareas
+window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('family-memory').value = window.familyPrompt;
+    document.getElementById('me-memory').value = window.mePrompt;
+    document.getElementById('grok-memory').value = window.grokPrompt;
+    document.getElementById('gemini-memory').value = window.geminiPrompt;
+});
+
 let currentSessionWords = [];
 let currentWordIndex = 0;
 let currentWord = '';
@@ -16,6 +24,8 @@ const modelSelect = document.getElementById('model-select');
 const sendBtn = document.getElementById('send');
 const newChatBtn = document.getElementById('new-chat');
 const conversationNameInput = document.getElementById('conversation-name');
+const progressBar = document.getElementById('progress-bar');
+const summarizeButton = document.getElementById('summarize-button');
 
 // Track conversation history
 let conversationHistory = [];
@@ -73,6 +83,18 @@ function addMessage(text, sender) {
         role: sender === 'user' ? 'user' : sender,
         content: text 
     });
+
+    updateProgressBar();
+}
+
+function updateProgressBar() {
+    const totalCharacters = chatDiv.textContent.length;
+    const maxCharacters = 6000;
+    let percentage = (totalCharacters / maxCharacters) * 100;
+    percentage = Math.min(percentage, 100); // Cap at 100%
+
+    const progressBar = document.getElementById('progress-bar');
+    progressBar.style.width = `${percentage}%`;
 }
 
 async function startNewChat() {
@@ -87,7 +109,7 @@ async function startNewChat() {
     input.focus();
 }
 
-async function sendGrokMessage() {
+async function sendGrokMessage(requestBody) {
     const message = input.value.trim();
     if (!message) return;
 
@@ -98,16 +120,10 @@ async function sendGrokMessage() {
 
     try {
         // Get the current conversation name
-        const currentConversationName = conversationNameInput.value || 'Untitled Chat';
-        
         const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                message: savedMessage,
-                history: conversationHistory.slice(0, -1),
-                conversationName: currentConversationName
-            }),
+            body: JSON.stringify(requestBody),
         });
 
         const data = await response.json();
@@ -122,7 +138,7 @@ async function sendGrokMessage() {
     }
 }
 
-async function sendGeminiMessage() {
+async function sendGeminiMessage(requestBody) {
     const message = input.value.trim();
     if (!message) return;
 
@@ -133,16 +149,10 @@ async function sendGeminiMessage() {
 
     try {
         // Get the current conversation name
-        const currentConversationName = conversationNameInput.value || 'Untitled Chat';
-        
         const response = await fetch('/api/gemini', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ 
-                prompt: savedMessage,
-                history: conversationHistory.slice(0, -1),
-                conversationName: currentConversationName
-            }),
+            body: JSON.stringify(requestBody),
         });
 
         const data = await response.json();
@@ -159,13 +169,94 @@ async function sendGeminiMessage() {
 
 async function sendMessage() {
     const selectedModel = modelSelect.value;
+    const familyMemory = document.getElementById('family-memory').value;
+    const meMemory = document.getElementById('me-memory').value;
+    const grokMemory = document.getElementById('grok-memory').value;
+    const geminiMemory = document.getElementById('gemini-memory').value;
+
+    let systemPrompt = `${familyMemory} ${meMemory}`; // Base memories
+    systemPrompt += selectedModel === 'grok' ? ` ${grokMemory}` : ` ${geminiMemory}`;
+
+    const requestBody = {
+        message: input.value,
+        history: conversationHistory,
+        conversationName: conversationNameInput.value,
+        systemPrompt: systemPrompt
+    };
+
     if (selectedModel === 'grok') {
-        await sendGrokMessage();
+        await sendGrokMessage(requestBody);
     } else {
-        await sendGeminiMessage();
+        await sendGeminiMessage(requestBody);
+    }
+}
+
+document.querySelectorAll('.icon').forEach(icon => {
+    icon.addEventListener('click', () => {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('active');
+    });
+});
+
+const pinButton = document.querySelector('.pin-button');
+
+pinButton.addEventListener('click', () => {
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.classList.toggle('pinned');
+});
+
+async function getSummary() {
+    addMessage("Generating summary...", "system"); // Indicate summary generation
+
+    const summaryPrompt = "Create a short, concise summary of the following conversation:";
+
+    const requestBody = {
+        message: summaryPrompt, // Use a specific prompt for summarization
+        history: conversationHistory, // Send the full history
+        conversationName: conversationNameInput.value, // Keep the same conversation name
+        systemPrompt: "You are a helpful assistant designed to summarize conversations." // Specific system prompt for summary
+    };
+
+    try {
+        const response = await fetch('/api/gemini', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(requestBody),
+        });
+
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error + (data.details ? `\n\nDetails: ${data.details}` : ''));
+        }
+
+        // Remove the "Generating summary..." message
+        const systemMessages = chatDiv.querySelectorAll('.message.system');
+        const lastSystemMessage = systemMessages[systemMessages.length - 1];
+        if (lastSystemMessage && lastSystemMessage.textContent.includes("Generating summary...")) {
+            lastSystemMessage.remove();
+        }
+
+        // Clear chat and history
+        chatDiv.innerHTML = '';
+        conversationHistory = [];
+
+        addMessage(`**Summary of past conversations:**\n${data.text}`, 'system'); // Add the summary as the only message
+        updateProgressBar(); // Reset progress bar after clearing
+
+    } catch (error) {
+         // Remove the "Generating summary..." message even on error
+        const systemMessages = chatDiv.querySelectorAll('.message.system');
+        const lastSystemMessage = systemMessages[systemMessages.length - 1];
+        if (lastSystemMessage && lastSystemMessage.textContent.includes("Generating summary...")) {
+            lastSystemMessage.remove();
+        }
+        addMessage(`Error generating summary: ${error.message}`, 'system');
     }
 }
 
 // Event listeners
 sendBtn.addEventListener('click', sendMessage);
 newChatBtn.addEventListener('click', startNewChat);
+
+summarizeButton.addEventListener('click', getSummary);

@@ -1,5 +1,4 @@
 import { GoogleGenAI } from "@google/genai";
-import { systemPrompt } from "../config.js";
 import { saveChatHistory } from "../utils/blobStorage.js";
 
 const genAI = new GoogleGenAI(process.env.GOOGLE_API_KEY);
@@ -10,10 +9,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { prompt, history = [], conversationName } = req.body;
+    const { message, history = [], conversationName, systemPrompt } = req.body;
     
-    if (!prompt) {
-      return res.status(400).json({ error: 'Prompt is required' });
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
     }
 
     const contextPrompt = [
@@ -26,10 +25,10 @@ export default async function handler(req, res) {
           return `${role}: ${msg.content}`;
         })
       ].join('\n\n');
-      
+
     const fullPrompt = contextPrompt ? 
-        `${contextPrompt}\n\nHuman: ${prompt}\n\nGemini:` : 
-        prompt;
+        `${contextPrompt}\n\nHuman: ${message}\n\nGemini:` : 
+        message;
 
     const response = await genAI.models.generateContent({
         model: 'gemini-2.5-pro-exp-03-25',
@@ -40,7 +39,7 @@ export default async function handler(req, res) {
 
     // Save API response to history
     await saveChatHistory([...history, 
-        { role: 'user', content: prompt },
+        { role: 'user', content: message },
         { role: 'Gemini', content: responseText }
     ], conversationName);
     

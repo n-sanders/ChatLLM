@@ -1,5 +1,4 @@
 import OpenAI from "openai";
-import { systemPrompt } from "../config.js";
 import { saveChatHistory } from "../utils/blobStorage.js";
 
 // Initialize OpenAI client with environment variable for API key
@@ -10,7 +9,7 @@ const client = new OpenAI({
 
 export default async function handler(req, res) {
     try {
-        const { message, history = [], conversationName } = req.body;
+        const { message, history = [], conversationName, systemPrompt } = req.body;
         if (!message) {
             return res.status(400).json({ error: "Message is required" });
         }
@@ -22,7 +21,7 @@ export default async function handler(req, res) {
         const messages = [
             {
                 role: "system",
-                content: "You are Grok, a chatbot inspired by the Hitchhiker's Guide to the Galaxy." + systemPrompt,
+                content: systemPrompt,
             },
             ...history.map(msg => ({
                 role: msg.role === "user" ? "user" : 

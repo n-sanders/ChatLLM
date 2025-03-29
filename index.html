@@ -5,8 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ChatLLM</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+  <div class="sidebar">
+    <button class="pin-button"><i class="fas fa-microchip"></i></button>
+    <div class="sidebar-content">
+      <div>Things to know about our family</div>
+      <textarea class="memory-input" id="family-memory"></textarea>
+      <div>Things to know about me</div>
+      <textarea class="memory-input" id="me-memory"></textarea>
+      <div>Things to know about Grok</div>
+      <textarea class="memory-input" id="grok-memory"></textarea>
+      <div>Things to know about Gemini</div>
+      <textarea class="memory-input" id="gemini-memory"></textarea>
+    </div>
+  </div>
   <div class="container">
     <h1>ChatLLM: Talk to AI!</h1>
     <div class="conversation-header">
@@ -15,6 +29,12 @@
     </div>
     <p>Type a message below to start chatting.</p>
     <div id="chat"></div>
+    <div id="progress-summary-container" style="display: flex;">
+      <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+      </div>
+      <button id="summarize-button">Summarize</button>
+    </div>
     <div class="input-container">
       <textarea id="input" rows="1" placeholder="Type your message..."></textarea>
       <select id="model-select">
@@ -25,6 +45,7 @@
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
