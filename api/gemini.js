@@ -31,7 +31,7 @@ export default async function handler(req, res) {
         message;
 
     const response = await genAI.models.generateContent({
-        model: 'gemini-2.5-pro-exp-03-25',
+        model: 'gemini-3-flash-preview',
         contents: fullPrompt,
     });
 
