@@ -37,7 +37,7 @@ export default async function handler(req, res) {
 
         // Make the API call to OpenAI
         const completion = await client.chat.completions.create({
-            model: "grok-2-latest",
+            model: "grok-4-1-fast-reasoning",
             messages: messages,
         });
 
