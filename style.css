@@ -135,6 +135,13 @@ h1 {
     background-color: #5a5a5a;
 }
 
+
+.input-container button:disabled,
+button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 #clear {
     background-color: #6b4a4a;
 }
@@ -274,6 +281,13 @@ button:hover {
 
 #summarize-button:hover {
     background-color: #5a5a5a;
+}
+
+#token-limit-message {
+    min-height: 1rem;
+    margin: 0 0 0.5rem;
+    color: #ff8a80;
+    font-size: 0.85rem;
 }
 
 /* Sidebar styles */
